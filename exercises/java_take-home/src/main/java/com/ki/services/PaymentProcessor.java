@@ -22,8 +22,9 @@ public class PaymentProcessor {
                 if (!((line = reader.readNext()) != null)) {
                     break;
                 }
-
-                Payment payment = new Payment(line);
+                System.out.println("Source: " + source);
+                // Let payment now take the source too
+                Payment payment = new Payment(line, source);
                 payments.add(payment);
             }
         } catch (IOException e) {
