@@ -16,9 +16,9 @@ public class PaymentProcessorTest {
         PaymentProcessor processor = new PaymentProcessor();
         Payment[] payments = processor.getPayments(fixturePath, "card");
         assertEquals(3, payments.length);
-        assertEquals(30, payments[0].card.getCardId());
-        assertEquals(45, payments[1].card.getCardId());
-        assertEquals(10, payments[2].card.getCardId());
+        assertEquals(30, payments[0].method.getId());
+        assertEquals(45, payments[1].method.getId());
+        assertEquals(10, payments[2].method.getId());
     }
 
     @Test
@@ -47,10 +47,10 @@ public class PaymentProcessorTest {
     }
 
     private Payment createPayment(String cardStatus) {
-        Card card = new Card();
+        Card card = new Card(0);
         card.setStatus(cardStatus);
         Payment payment = new Payment();
-        payment.card = card;
+        payment.method = card;
         return payment;
     }
 }

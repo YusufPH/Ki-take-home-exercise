@@ -12,12 +12,12 @@ public class Payment {
     private LocalDate date;
     private int amount;
     private int fee;
-    public Card card;
+    public PaymentMethod method;
 
     public Payment() {
     }
 
-    public Payment(String[] data) {
+    public Payment(String[] data, String source) {
         this.setCustomerId(Integer.parseInt(data[0]));
 
         BigDecimal paymentFeeRate = Config.getPaymentFeeRate();
@@ -26,15 +26,18 @@ public class Payment {
         this.setAmount(totalAmount - this.getFee());
         this.setDate(LocalDate.parse(data[1]));
 
-        Card card = new Card();
-        card.setCardId(Integer.parseInt(data[3]));
-        card.setStatus(data[4]);
+        // We'll use a factory to create the PaymentMethod as this class shouldn't necessarily care about the type
+        PaymentMethod method = PaymentMethodFactory.getPaymentMethod(source, Integer.parseInt(data[3]));
 
-        this.card = card;
+        if (method instanceof Card) {
+            method.setStatus(data[4]);
+        }
+
+        this.method = method;
     }
 
     public boolean isSuccessful() {
-        return card.getStatus().equals("processed");
+        return method.getStatus().equals("processed");
     }
 
     public int getCustomerId() {
